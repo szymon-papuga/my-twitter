@@ -30,7 +30,8 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "^5.12.1",
-		"date-fns": "^3.6.0"
+		"date-fns": "^3.6.0",
+		"svelte-infinite-scroll": "^2.0.1"
 	},
 	"prisma": {
 		"seed": "node prisma/seed.js"
