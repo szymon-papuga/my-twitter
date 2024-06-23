@@ -16,7 +16,7 @@
 
 <div class="w-2/5">
 	{#each tweets as tweet (tweet.id)}
-		<Tweet {tweet} />
+		<Tweet {tweet} on:comment />
 	{/each}
 	<InfiniteScroll
 		hasMore={newTweetsLen}
