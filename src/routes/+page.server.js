@@ -6,6 +6,9 @@ export async function load() {
 			include: {
 				user: true
 			},
+			where: {
+				parentTweet: null
+			},
 			take: 20,
 			orderBy: {
 				creationTime: 'desc'
@@ -17,6 +20,21 @@ export async function load() {
 export const actions = {
 	default: async ({ request }) => {
 		const data = await request.formData();
-		console.log(data.get('text'));
+		await prisma.tweet.create({
+			data: {
+				text: data.get('text'),
+				user: {
+					connect: {
+						id: 1
+					}
+				},
+				creationTime: new Date(),
+				parentTweet: {
+					connect: {
+						id: parseInt(data.get('parentId'))
+					}
+				}
+			}
+		});
 	}
 };
