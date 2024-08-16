@@ -1,5 +1,4 @@
 <script>
-	import { formatDistanceToNow } from 'date-fns';
 	import { createEventDispatcher } from 'svelte';
 	import ChatBubbleOutline from 'virtual:icons/material-symbols/chat-bubble-outline';
 
@@ -8,27 +7,19 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="border p-3.5">
-	<div>
-		<a class="font-bold pr-2">{tweet.user.name}</a>{formatDistanceToNow(tweet.creationTime)}
-	</div>
-	{tweet.text}
-	<div class="mt-1 h-5 relative right-1">
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<div
-			id="comment-button"
-			on:click={() => {
-				dispatch('comment', tweet);
-			}}
-		>
-			<div id="comment-icon">
-				<ChatBubbleOutline
-					style="margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
-				/>
-			</div>
-			12
+<div class="mt-1 h-5 relative right-1">
+	<div
+		id="comment-button"
+		on:click|stopPropagation={() => {
+			dispatch('comment', tweet);
+		}}
+	>
+		<div id="comment-icon">
+			<ChatBubbleOutline
+				style="margin: 0; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"
+			/>
 		</div>
+		12
 	</div>
 </div>
 

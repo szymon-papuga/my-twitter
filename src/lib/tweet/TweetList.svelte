@@ -1,10 +1,10 @@
 <script>
-	import Tweet from './Tweet.svelte';
 	import InfiniteScroll from 'svelte-infinite-scroll';
+	import TweetWithFooter from '$lib/tweet/TweetWithFooter.svelte';
 
 	export let tweets;
 	let newTweetsLen = tweets.length;
-	$: cursor = tweets[tweets.length - 1].id;
+	$: cursor = newTweetsLen > 0 ? tweets[tweets.length - 1].id : null;
 
 	async function fetchTweets() {
 		const response = await fetch(`http://localhost:5173/tweets?cursor=${cursor}`);
@@ -14,9 +14,9 @@
 	}
 </script>
 
-<div class="w-2/5">
+<div class="divide-y">
 	{#each tweets as tweet (tweet.id)}
-		<Tweet {tweet} on:comment />
+		<TweetWithFooter {tweet} on:comment on:tweetClicked />
 	{/each}
 	<InfiniteScroll
 		hasMore={newTweetsLen}

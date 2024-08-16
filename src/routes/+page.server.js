@@ -1,40 +1,5 @@
-import prisma from '$lib/prisma';
+import { redirect } from '@sveltejs/kit';
 
-export async function load() {
-	return {
-		tweets: await prisma.tweet.findMany({
-			include: {
-				user: true
-			},
-			where: {
-				parentTweet: null
-			},
-			take: 20,
-			orderBy: {
-				creationTime: 'desc'
-			}
-		})
-	};
+export function load() {
+	throw redirect(307, '/tweets');
 }
-
-export const actions = {
-	default: async ({ request }) => {
-		const data = await request.formData();
-		await prisma.tweet.create({
-			data: {
-				text: data.get('text'),
-				user: {
-					connect: {
-						id: 1
-					}
-				},
-				creationTime: new Date(),
-				parentTweet: {
-					connect: {
-						id: parseInt(data.get('parentId'))
-					}
-				}
-			}
-		});
-	}
-};

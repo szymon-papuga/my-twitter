@@ -21,3 +21,7 @@ export async function GET({ url }) {
 
 	return json(tweets);
 }
+
+export async function POST({ request }) {
+	const tweet = await request.json();
+}
