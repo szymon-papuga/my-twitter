@@ -8,8 +8,8 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="fixed top-8 border-2 h-52 bg-white w-2/5">
 	<button on:click={() => dispatch('close')}>close</button>
+<div class="fixed top-8 border-2 bg-white w-2/5">
 	<Tweet {tweet} />
 	<CommentForm tweetId={tweet.id} on:close />
 </div>
