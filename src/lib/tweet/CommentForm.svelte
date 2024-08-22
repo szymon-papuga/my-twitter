@@ -16,7 +16,9 @@
 	on:submit={() => dispatch('close')}
 	class="p-4"
 >
+	<span class="relative top-1">
 		<Person />
+	</span>
 	<textarea
 		name="text"
 		placeholder="Add another tweet"

@@ -17,7 +17,7 @@
 	class="p-3.5 flex"
 >
 	<div class="flex flex-col">
-		<Person />
+		<span class="relative top-0.5"><Person /></span>
 		<slot name="branch" />
 	</div>
 	<div>
