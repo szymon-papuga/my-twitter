@@ -11,5 +11,5 @@
 	<button on:click={() => dispatch('close')}>close</button>
 <div class="fixed top-8 border-2 bg-white w-2/5">
 	<Tweet {tweet} />
-	<CommentForm tweetId={tweet.id} on:close />
+	<CommentForm tweetId={tweet.id} rows={2} on:close />
 </div>

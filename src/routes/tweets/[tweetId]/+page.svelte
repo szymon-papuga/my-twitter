@@ -30,7 +30,7 @@
 <!-- /> -->
 <div class="flex flex-col w-2/5 border divide-y">
 	<TweetHierarchy tweet={data.tweets[0]} />
-	<CommentForm {tweetId} />
+	<CommentForm {tweetId} rows={1} />
 	<TweetList
 		tweets={data.tweets.filter((tweet) => tweet.parentTweetId === tweetId)}
 		on:comment={handleComment}
