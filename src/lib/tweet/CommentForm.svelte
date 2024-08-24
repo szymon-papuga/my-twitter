@@ -42,6 +42,8 @@
 		placeholder="Add another tweet"
 		class="block outline-none text-xl resize-none w-full col-start-2"
 		rows="1"
+		required
+		maxlength="140"
 		style={style.textAreaStyle}
 		use:autosize
 		on:focus={() => (rows = 2)}
