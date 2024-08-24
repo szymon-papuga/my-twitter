@@ -7,7 +7,7 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<div class="mt-1 h-5 relative right-1">
+<div class="mt-1 h-5 relative right-1 mb-3.5">
 	<div
 		id="comment-button"
 		on:click|stopPropagation={() => {

@@ -14,7 +14,7 @@
 	on:click={() => {
 		dispatch('tweetClicked', tweet);
 	}}
-	class="p-3.5 flex"
+	class="px-3.5 pt-3.5 flex"
 >
 	<div class="flex flex-col">
 		<span class="relative top-0.5"><Person /></span>
