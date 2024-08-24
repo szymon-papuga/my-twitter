@@ -40,7 +40,8 @@
 	<textarea
 		name="text"
 		placeholder="Add another tweet"
-		class="block outline-none text-xl resize-none w-full col-start-2 h-14"
+		class="block outline-none text-xl resize-none w-full col-start-2"
+		rows="1"
 		style={style.textAreaStyle}
 		use:autosize
 		on:focus={() => (rows = 2)}
