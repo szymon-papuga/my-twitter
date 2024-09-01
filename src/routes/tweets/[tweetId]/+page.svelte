@@ -23,13 +23,13 @@
 	}
 </script>
 
-<!-- <TweetList -->
-<!-- 	on:comment={handleComment} -->
-<!-- 	on:tweetClicked={handleTweetClicked} -->
-<!-- /> -->
 <div class="flex flex-col w-2/5 border divide-y">
 	<!-- TODO: extract function? -->
-	<TweetHierarchy tweets={data.tweets.filter((tweet) => tweet.parentTweetId !== tweetId)} />
+	<TweetHierarchy
+		tweets={data.tweets.filter((tweet) => tweet.parentTweetId !== tweetId)}
+		on:comment={handleComment}
+		on:tweetClicked={handleTweetClicked}
+	/>
 	<CommentForm {tweetId} rows={1} />
 	<TweetList
 		tweets={data.tweets.filter((tweet) => tweet.parentTweetId === tweetId)}
