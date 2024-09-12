@@ -11,13 +11,13 @@
 		<TweetWithFooter tweet={tweets[0]} on:comment on:tweetClicked />
 	{:else if tweets.length >= 2}
 		<TweetWithFooter tweet={tweets[0]} on:comment on:tweetClicked>
-			<div id="branch" slot="branch" class="h-full mt-3" />
+			<div slot="branch" class="branch h-full mt-3" />
 		</TweetWithFooter>
 
 		{#each middleTweets as tweet (tweet.id)}
 			<TweetWithFooter {tweet} on:comment on:tweetClicked avatarTop={'top-1.5'}>
-				<div id="upperBranch" slot="upperBranch" class="h-3.5" />
-				<div id="branch" slot="branch" class="h-full" />
+				<div slot="upperBranch" class="branch h-3.5" />
+				<div slot="branch" class="branch h-full" />
 			</TweetWithFooter>
 		{/each}
 
@@ -27,19 +27,13 @@
 			on:tweetClicked
 			avatarTop={'top-0'}
 		>
-			<div id="upperBranch" slot="upperBranch" class="h-3.5" />
+			<div slot="upperBranch" class="branch h-3.5" />
 		</TweetWithFooter>
 	{/if}
 </div>
 
 <style>
-	#branch {
-		width: 2px;
-		background-color: rgb(207, 217, 222);
-		margin-left: auto;
-		margin-right: auto;
-	}
-	#upperBranch {
+	.branch {
 		width: 2px;
 		background-color: rgb(207, 217, 222);
 		margin-left: auto;
