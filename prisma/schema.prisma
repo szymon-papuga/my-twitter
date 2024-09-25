@@ -19,7 +19,9 @@ model Tweet {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Tweet Tweet[]
+  id       Int     @id @default(autoincrement())
+  name     String
+  Tweet    Tweet[]
+  email    String  @unique
+  password String
 }
