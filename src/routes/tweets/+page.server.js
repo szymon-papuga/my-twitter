@@ -1,6 +1,10 @@
 import prisma from '$lib/prisma';
+import { redirect } from '@sveltejs/kit';
+import redirectIfNotLoggedIn from '$lib/redirect.js';
 
-export async function load() {
+export async function load(event) {
+	redirectIfNotLoggedIn(event);
+
 	return {
 		tweets: await prisma.tweet.findMany({
 			include: {
@@ -18,7 +22,7 @@ export async function load() {
 }
 
 export const actions = {
-	default: async ({ request }) => {
+	comment: async ({ request }) => {
 		const data = await request.formData();
 		await prisma.tweet.create({
 			data: {
@@ -36,5 +40,9 @@ export const actions = {
 				}
 			}
 		});
+	},
+	logout: async ({ cookies }) => {
+		cookies.delete('AuthorizationToken', { path: '/' });
+		throw redirect(302, '/login');
 	}
 };

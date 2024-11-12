@@ -28,7 +28,7 @@
 
 <form
 	method="POST"
-	action="/tweets"
+	action="/tweets/comment"
 	use:enhance
 	on:submit={() => dispatch('close')}
 	class="p-4"

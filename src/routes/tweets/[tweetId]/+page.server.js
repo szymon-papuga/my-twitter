@@ -1,7 +1,10 @@
 import prisma from '$lib/prisma';
+import redirectIfNotLoggedIn from '$lib/redirect.js';
 
-export async function load({ params }) {
-	const tweetId = parseInt(params.tweetId);
+export async function load(event) {
+	redirectIfNotLoggedIn(event);
+
+	const tweetId = parseInt(event.params.tweetId);
 
 	return {
 		tweets: (

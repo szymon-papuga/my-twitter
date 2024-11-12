@@ -10,9 +10,7 @@ export const actions = {
 		const missingFields = ['username', 'email', 'password'].filter((field) => !user[field]);
 
 		if (!_.isEmpty(missingFields)) {
-			return fail(400, {
-				error: `Missing ${missingFields.join(' and ')}`
-			});
+			return fail(400, { error: `Missing ${missingFields.join(' and ')}` });
 		}
 
 		await prisma.user.create({
