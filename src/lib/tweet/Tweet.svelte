@@ -1,32 +1,30 @@
 <script>
 	import { formatDistanceToNow } from 'date-fns';
-	import { createEventDispatcher } from 'svelte';
 	import Person from 'virtual:icons/material-symbols/person';
 
-	export let tweet;
-	export let avatarTop = 'top-4';
-
-	const dispatch = createEventDispatcher();
+	let {
+		tweet,
+		avatarTop = 'top-4',
+		tweetClicked = () => {},
+		upperBranch,
+		branch,
+		footer
+	} = $props();
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div
-	on:click={() => {
-		dispatch('tweetClicked', tweet);
-	}}
-	class="px-3.5 flex"
->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<div onclick={() => tweetClicked(tweet)} class="px-3.5 flex">
 	<div class="flex flex-col mr-2">
-		<slot name="upperBranch" />
+		{@render upperBranch?.()}
 		<div class="relative {avatarTop} mb-1.5">
 			<Person />
 		</div>
-		<slot name="branch" />
+		{@render branch?.()}
 	</div>
 	<div class="mt-3.5">
 		<a class="font-bold pr-2">{tweet.user.name}</a>{formatDistanceToNow(tweet.creationTime)}
 		<div>{tweet.text}</div>
-		<slot name="footer" />
+		{@render footer?.()}
 	</div>
 </div>

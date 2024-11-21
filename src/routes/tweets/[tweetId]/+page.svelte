@@ -6,19 +6,18 @@
 	import { page } from '$app/stores';
 	import TweetHierarchy from '$lib/tweet/TweetHierarchy.svelte';
 
-	export let data;
-	let tweet;
+	let { data } = $props();
+	let tweet = $state();
 	const tweetId = parseInt($page.params.tweetId);
 
-	function handleComment(event) {
-		tweet = event.detail;
+	function handleComment(tweetBeingCommented) {
+		tweet = tweetBeingCommented;
 	}
 
-	function handleTweetClicked(event) {
-		tweet = event.detail;
+	function handleTweetClicked(clicked) {
 		if (browser) {
 			// to prevent error window is not defined, because it's SSR
-			window.location.href = `/tweets/${event.detail.id}`;
+			window.location.href = `/tweets/${clicked.id}`;
 		}
 	}
 </script>
@@ -27,16 +26,16 @@
 	<!-- TODO: extract function? -->
 	<TweetHierarchy
 		tweets={data.tweets.filter((tweet) => tweet.parentTweetId !== tweetId)}
-		on:comment={handleComment}
-		on:tweetClicked={handleTweetClicked}
+		comment={handleComment}
+		tweetClicked={handleTweetClicked}
 	/>
 	<CommentForm {tweetId} rows={1} />
 	<TweetList
 		tweets={data.tweets.filter((tweet) => tweet.parentTweetId === tweetId)}
-		on:comment={handleComment}
-		on:tweetClicked={handleTweetClicked}
+		comment={handleComment}
+		tweetClicked={handleTweetClicked}
 	/>
 </div>
 {#if tweet !== undefined}
-	<CommentPopup {tweet} on:close={() => (tweet = undefined)} />
+	<CommentPopup {tweet} close={() => (tweet = undefined)} />
 {/if}

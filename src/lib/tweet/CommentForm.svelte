@@ -1,6 +1,6 @@
 <script>
+	import { run } from 'svelte/legacy';
 	import { enhance } from '$app/forms';
-	import { createEventDispatcher } from 'svelte';
 	import autosize from 'svelte-autosize';
 	import Person from 'virtual:icons/material-symbols/person';
 
@@ -15,22 +15,23 @@
 		}
 	};
 
-	export let tweetId;
-	export let rows;
+	let { tweetId, rows, close = () => {} } = $props();
 
-	$: if (rows !== 1 && rows !== 2) {
-		throw Error(`rows must be 1 or 2 but was: ${rows}`);
-	}
+	// Looks like checks like that are not very popular in frontend frameworks
+	// Leaving it for now, can be handled nicely with TS, I guess
+	run(() => {
+		if (rows !== 1 && rows !== 2) {
+			throw Error(`rows must be 1 or 2 but was: ${rows}`);
+		}
+	});
 
-	$: style = stylesPerRows[rows];
-	const dispatch = createEventDispatcher();
+	let style = $derived(stylesPerRows[rows]);
 </script>
 
 <form
 	method="POST"
-	action="/tweets/comment"
-	use:enhance
-	on:submit={() => dispatch('close')}
+	action="/tweets?/comment"
+	use:enhance={() => close()}
 	class="p-4"
 	style={style.formStyle}
 >
@@ -46,8 +47,8 @@
 		maxlength="140"
 		style={style.textAreaStyle}
 		use:autosize
-		on:focus={() => (rows = 2)}
-	/>
+		onfocus={() => (rows = 2)}
+	></textarea>
 	<input type="hidden" name="parentId" value={tweetId} />
 	<input
 		type="submit"

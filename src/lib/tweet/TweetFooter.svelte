@@ -1,17 +1,15 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
 	import ChatBubbleOutline from 'virtual:icons/material-symbols/chat-bubble-outline';
 
-	export let tweet;
-
-	const dispatch = createEventDispatcher();
+	let { tweet, comment } = $props();
 </script>
 
 <div class="mt-1 h-5 relative right-1 mb-3.5">
 	<div
 		id="comment-button"
-		on:click|stopPropagation={() => {
-			dispatch('comment', tweet);
+		onclick={(event) => {
+			event.stopPropagation();
+			comment(tweet);
 		}}
 	>
 		<div id="comment-icon">

@@ -3,23 +3,23 @@
 	import { browser } from '$app/environment';
 	import CommentPopup from '$lib/tweet/CommentPopup.svelte';
 
-	export let data;
+	let { data } = $props();
 
-	let tweet;
+	let tweet = $state();
 </script>
 
 <div class="w-2/5 border">
 	<TweetList
 		tweets={data.tweets}
-		on:comment={(event) => (tweet = event.detail)}
-		on:tweetClicked={(event) => {
+		comment={(tweetBeingCommented) => (tweet = tweetBeingCommented)}
+		tweetClicked={(clicked) => {
 			if (browser) {
 				// to prevent error window is not defined, because it's SSR
-				window.location.href = `/tweets/${event.detail.id}`;
+				window.location.href = `/tweets/${clicked.id}`;
 			}
 		}}
 	/>
 </div>
 {#if tweet !== undefined}
-	<CommentPopup {tweet} on:close={() => (tweet = undefined)} />
+	<CommentPopup {tweet} close={() => (tweet = undefined)} />
 {/if}

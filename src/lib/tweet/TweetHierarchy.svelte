@@ -1,33 +1,36 @@
 <script>
 	import TweetWithFooter from './TweetWithFooter.svelte';
 
-	export let tweets;
+	let { tweets, comment, tweetClicked } = $props();
 
 	const middleTweets = tweets.slice(1, -1);
 </script>
 
 <div class="flex flex-col divide-y">
 	{#if tweets.length === 1}
-		<TweetWithFooter tweet={tweets[0]} on:comment on:tweetClicked />
+		<TweetWithFooter tweet={tweets[0]} {comment} {tweetClicked} />
 	{:else if tweets.length >= 2}
-		<TweetWithFooter tweet={tweets[0]} on:comment on:tweetClicked>
-			<div slot="branch" class="branch h-full mt-3" />
+		<TweetWithFooter tweet={tweets[0]} {comment} {tweetClicked}>
+			{#snippet branch()}
+				<div class="branch h-full mt-3"></div>
+			{/snippet}
 		</TweetWithFooter>
 
 		{#each middleTweets as tweet (tweet.id)}
-			<TweetWithFooter {tweet} on:comment on:tweetClicked avatarTop={'top-1.5'}>
-				<div slot="upperBranch" class="branch h-3.5" />
-				<div slot="branch" class="branch h-full" />
+			<TweetWithFooter {tweet} {comment} {tweetClicked} avatarTop={'top-1.5'}>
+				{#snippet upperBranch()}
+					<div class="branch h-3.5"></div>
+				{/snippet}
+				{#snippet branch()}
+					<div class="branch h-full"></div>
+				{/snippet}
 			</TweetWithFooter>
 		{/each}
 
-		<TweetWithFooter
-			tweet={tweets[tweets.length - 1]}
-			on:comment
-			on:tweetClicked
-			avatarTop={'top-0'}
-		>
-			<div slot="upperBranch" class="branch h-3.5" />
+		<TweetWithFooter tweet={tweets[tweets.length - 1]} {comment} {tweetClicked} avatarTop={'top-0'}>
+			{#snippet upperBranch()}
+				<div class="branch h-3.5"></div>
+			{/snippet}
 		</TweetWithFooter>
 	{/if}
 </div>
