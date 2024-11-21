@@ -22,14 +22,14 @@ export async function load(event) {
 }
 
 export const actions = {
-	comment: async ({ request }) => {
+	comment: async ({ request, locals }) => {
 		const data = await request.formData();
 		await prisma.tweet.create({
 			data: {
 				text: data.get('text'),
 				user: {
 					connect: {
-						id: 1
+						id: locals.user.id
 					}
 				},
 				creationTime: new Date(),
