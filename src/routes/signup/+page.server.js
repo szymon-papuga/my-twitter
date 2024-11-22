@@ -10,7 +10,21 @@ export const actions = {
 		const missingFields = ['username', 'email', 'password'].filter((field) => !user[field]);
 
 		if (!_.isEmpty(missingFields)) {
-			return fail(400, { error: `Missing ${missingFields.join(' and ')}` });
+			return fail(400, { user, error: `Missing ${missingFields.join(' and ')}` });
+		}
+
+		const userAlreadySignedUp =
+			(await prisma.user.findUnique({
+				where: {
+					email: user.email
+				}
+			})) !== null;
+
+		if (userAlreadySignedUp) {
+			return fail(409, {
+				user,
+				error: 'The account for the given e-mail already exists. Use different e-mail.'
+			});
 		}
 
 		await prisma.user.create({
