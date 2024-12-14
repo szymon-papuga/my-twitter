@@ -27,9 +27,13 @@ export const actions = {
 			}
 		});
 
+		if (!user) {
+			return fail(401, { error: 'Invalid credentials' });
+		}
+
 		const passwordIsValid = await bcrypt.compare(formData.password, user.password);
 
-		if (!user || !passwordIsValid) {
+		if (!passwordIsValid) {
 			return fail(401, { error: 'Invalid credentials' });
 		}
 
