@@ -20,8 +20,10 @@ services:
       PORT: 3000
       ORIGIN: http://localhost:3000
     depends_on:
-      prisma-db-seed:
+      prisma-migrate-deploy:
         condition: service_completed_successfully
+    profiles:
+      - dev
     develop:
       watch:
         - action: sync
@@ -62,15 +64,8 @@ services:
     depends_on:
       prisma-migrate-deploy:
         condition: service_completed_successfully
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./
-    #       target: /app
-    #     - action: rebuild
-    #       path: package.json
-    #     - action: rebuild
-    #       path: package-lock.json
+    profiles:
+      - seed
 
   db:
     ## why alpine
