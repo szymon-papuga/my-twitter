@@ -1,0 +1,86 @@
+###
+## todo - should we have separate compose files for different envs?
+## for local dev, wait for db to pass healthcheck before we start node
+## also, build custom dockerfile to the dev stage
+## TODO secrets and volumes
+###
+
+services:
+  node:
+    build:
+      # build to the stage named dev
+      # todo change to dev later on
+      target: prod
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
+      # TODO it should be done as secret
+      JWT_ACCESS_SECRET: foo
+      PORT: 3000
+      ORIGIN: http://localhost:3000
+    depends_on:
+      prisma-db-seed:
+        condition: service_completed_successfully
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: package-lock.json
+
+  prisma-migrate-deploy:
+    build:
+      target: build
+    command: ['npx', 'prisma', 'migrate', 'deploy']
+    environment:
+      # TODO it should be done as secret
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./
+    #       target: /app
+    #     - action: rebuild
+    #       path: package.json
+    #     - action: rebuild
+    #       path: package-lock.json
+
+  prisma-db-seed:
+    build:
+      target: build
+    command: ['npx', 'prisma', 'db', 'seed']
+    environment:
+      # TODO it should be done as secret
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
+    depends_on:
+      prisma-migrate-deploy:
+        condition: service_completed_successfully
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./
+    #       target: /app
+    #     - action: rebuild
+    #       path: package.json
+    #     - action: rebuild
+    #       path: package-lock.json
+
+  db:
+    ## why alpine
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      ## why such healthcheck
+      - ./healthchecks:/healthchecks
+    healthcheck:
+      test: /healthchecks/postgres-healthcheck
+      interval: '5s'
