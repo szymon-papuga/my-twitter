@@ -7,7 +7,7 @@
 	let cursor = $derived(newTweetsLen > 0 ? tweets[tweets.length - 1].id : null);
 
 	async function fetchTweets() {
-		const response = await fetch(`http://localhost:5173/tweets?cursor=${cursor}`);
+		const response = await fetch(`http://localhost:3000/tweets?cursor=${cursor}`);
 		const newTweets = await response.json();
 		tweets = [...tweets, ...newTweets];
 		newTweetsLen = newTweets.length;
