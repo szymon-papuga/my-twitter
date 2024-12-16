@@ -44,15 +44,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    # develop:
-    #   watch:
-    #     - action: sync
-    #       path: ./
-    #       target: /app
-    #     - action: rebuild
-    #       path: package.json
-    #     - action: rebuild
-    #       path: package-lock.json
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./prisma/migrations
+          target: /app/prisma/migrations
 
   prisma-db-seed:
     build:
