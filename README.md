@@ -11,8 +11,9 @@ not interested in seeding DB).
 If you are running the app for the first time and would like to populate DB with
 some data, you may use such command:
 ```bash
-docker compose --profile seed up --exit-code-from prisma-db-seed
+docker compose --profile seed up
 ```
+Wait until you see 'The seed command has been executed' and stop containers with Ctrl-C.
 Next, run containers. It runs DB and app containers, among the others.
 ```bash
 docker compose --profile dev up
