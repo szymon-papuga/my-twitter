@@ -1,5 +1,8 @@
 node_modules
 .git
 *Dockerfile*
-*docker-compose*
+*compose*
 todo
+README.md
+healthchecks
+secrets
