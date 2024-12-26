@@ -2,7 +2,6 @@
 ## todo - should we have separate compose files for different envs?
 ## for local dev, wait for db to pass healthcheck before we start node
 ## also, build custom dockerfile to the dev stage
-## TODO secrets and volumes
 ###
 
 services:
@@ -78,6 +77,7 @@ services:
       # It should be a secret but I was unable to make it work
       POSTGRES_PASSWORD: postgres
     volumes:
+      - db-data:/var/lib/postgresql/data
       ## why such healthcheck
       - ./healthchecks:/healthchecks
     healthcheck:
@@ -88,3 +88,5 @@ secrets:
   jwt-access:
     file: jwt-access-secret
 
+volumes:
+  db-data:
