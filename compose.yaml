@@ -14,11 +14,13 @@ services:
     ports:
       - '3000:3000'
     environment:
+      # Ideally, it should be stored as a secret, but looks like Prisma
+      # basically requires this env var to exist
       DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
-      # TODO it should be done as secret
-      JWT_ACCESS_SECRET: foo
       PORT: 3000
       ORIGIN: http://localhost:3000
+    secrets:
+      - jwt-access
     depends_on:
       prisma-migrate-deploy:
         condition: service_completed_successfully
@@ -37,9 +39,10 @@ services:
   prisma-migrate-deploy:
     build:
       target: build
-    command: ['npx', 'prisma', 'migrate', 'deploy']
+    entrypoint: ['npx', 'prisma', 'migrate', 'deploy']
     environment:
-      # TODO it should be done as secret
+      # Ideally, it should be stored as a secret, but looks like Prisma
+      # basically requires this env var to exist
       DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
     depends_on:
       db:
@@ -53,9 +56,10 @@ services:
   prisma-db-seed:
     build:
       target: build
-    command: ['npx', 'prisma', 'db', 'seed']
+    entrypoint: ['npx', 'prisma', 'db', 'seed']
     environment:
-      # TODO it should be done as secret
+      # Ideally, it should be stored as a secret, but looks like Prisma
+      # basically requires this env var to exist
       DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
     depends_on:
       prisma-migrate-deploy:
@@ -70,6 +74,7 @@ services:
       - '5432:5432'
     environment:
       POSTGRES_USER: postgres
+      # It should be a secret but I was unable to make it work
       POSTGRES_PASSWORD: postgres
     volumes:
       ## why such healthcheck
@@ -77,3 +82,8 @@ services:
     healthcheck:
       test: /healthchecks/postgres-healthcheck
       interval: '5s'
+
+secrets:
+  jwt-access:
+    file: jwt-access-secret
+

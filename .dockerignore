@@ -5,4 +5,4 @@ node_modules
 todo
 README.md
 healthchecks
-secrets
+jwt-access-secret

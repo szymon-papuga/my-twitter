@@ -3,7 +3,7 @@ import _ from 'lodash';
 import prisma from '$lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { JWT_ACCESS_SECRET } from '$env/static/private';
+import jwtAccessSecret from '$lib/jwtAccessSecret';
 
 export function load(event) {
 	if (event.locals.user) {
@@ -42,7 +42,7 @@ export const actions = {
 			email: user.email
 		};
 
-		const token = jwt.sign(jwtUser, JWT_ACCESS_SECRET, { expiresIn: '1d' });
+		const token = jwt.sign(jwtUser, jwtAccessSecret(), { expiresIn: '1d' });
 
 		cookies.set('AuthorizationToken', `Bearer ${token}`, {
 			path: '/',
