@@ -1,5 +1,5 @@
-import prisma from '$lib/prisma';
-import redirectIfNotLoggedIn from '$lib/redirect.js';
+import prisma from '$lib/server/prisma';
+import redirectIfNotLoggedIn from '$lib/server/redirect.js';
 
 export async function load(event) {
 	redirectIfNotLoggedIn(event);

@@ -1,6 +1,6 @@
-import prisma from '$lib/prisma';
+import prisma from '$lib/server/prisma';
 import { redirect } from '@sveltejs/kit';
-import redirectIfNotLoggedIn from '$lib/redirect.js';
+import redirectIfNotLoggedIn from '$lib/server/redirect.js';
 
 export async function load(event) {
 	redirectIfNotLoggedIn(event);

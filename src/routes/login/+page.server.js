@@ -1,9 +1,9 @@
 import { redirect, fail } from '@sveltejs/kit';
 import _ from 'lodash';
-import prisma from '$lib/prisma';
+import prisma from '$lib/server/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import jwtAccessSecret from '$lib/jwtAccessSecret';
+import jwtAccessSecret from '$lib/server/jwtAccessSecret';
 
 export function load(event) {
 	if (event.locals.user) {

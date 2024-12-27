@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import jwtAccessSecret from '$lib/jwtAccessSecret';
-import prisma from '$lib/prisma';
+import jwtAccessSecret from '$lib/server/jwtAccessSecret';
+import prisma from '$lib/server/prisma';
 
 export async function handle({ event, resolve }) {
 	const authCookie = event.cookies.get('AuthorizationToken');

@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import prisma from '$lib/prisma';
+import prisma from '$lib/server/prisma';
 
 export async function GET({ url }) {
 	const tweets = await prisma.tweet.findMany({

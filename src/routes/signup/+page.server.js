@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import prisma from '$lib/prisma';
+import prisma from '$lib/server/prisma';
 import bcrypt from 'bcryptjs';
 import _ from 'lodash';
 
