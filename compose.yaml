@@ -1,5 +1,4 @@
 ###
-## todo - should we have separate compose files for different envs?
 ## for local dev, wait for db to pass healthcheck before we start node
 ## also, build custom dockerfile to the dev stage
 ###
@@ -8,16 +7,13 @@ services:
   node:
     build:
       # build to the stage named dev
-      # todo change to dev later on
-      target: prod
+      target: dev
     ports:
-      - '3000:3000'
+      - '5173:5173'
     environment:
       # Ideally, it should be stored as a secret, but looks like Prisma
       # basically requires this env var to exist
       DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
-      PORT: 3000
-      ORIGIN: http://localhost:3000
       JWT_ACCESS_FILE: /run/secrets/jwt-access
     secrets:
       - jwt-access
@@ -38,8 +34,8 @@ services:
 
   prisma-migrate-deploy:
     build:
-      target: build
-    entrypoint: ['npx', 'prisma', 'migrate', 'deploy']
+      target: dev
+    command: ['npx', 'prisma', 'migrate', 'deploy']
     environment:
       # Ideally, it should be stored as a secret, but looks like Prisma
       # basically requires this env var to exist
@@ -55,8 +51,8 @@ services:
 
   prisma-db-seed:
     build:
-      target: build
-    entrypoint: ['npx', 'prisma', 'db', 'seed']
+      target: dev
+    command: ['npx', 'prisma', 'db', 'seed']
     environment:
       # Ideally, it should be stored as a secret, but looks like Prisma
       # basically requires this env var to exist
@@ -68,7 +64,6 @@ services:
       - seed
 
   db:
-    ## why alpine
     image: postgres:alpine
     ports:
       - '5432:5432'
