@@ -73,10 +73,8 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
-      ## why such healthcheck
-      - ./healthchecks:/healthchecks
     healthcheck:
-      test: /healthchecks/postgres-healthcheck
+      test: pg_isready -U postgres
       interval: '5s'
 
 secrets:
