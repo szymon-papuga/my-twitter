@@ -69,17 +69,20 @@ services:
       - '5432:5432'
     environment:
       POSTGRES_USER: postgres
-      # It should be a secret but I was unable to make it work
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
     volumes:
       - db-data:/var/lib/postgresql/data
     healthcheck:
       test: pg_isready -U postgres
       interval: '5s'
+    secrets:
+      - db-password
 
 secrets:
   jwt-access:
-    file: jwt-access-secret
+    file: secrets/jwt-access
+  db-password:
+    file: secrets/db-password
 
 volumes:
   db-data:
