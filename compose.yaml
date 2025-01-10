@@ -27,6 +27,9 @@ services:
         - action: sync
           path: ./
           target: /app
+          ignore:
+            - playwright*
+            - test-results
         - action: rebuild
           path: package.json
         - action: rebuild
