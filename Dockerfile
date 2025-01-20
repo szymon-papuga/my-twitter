@@ -25,8 +25,10 @@ WORKDIR /app
 COPY --chown=node:node package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
-FROM base as dev
+FROM base AS dev
 RUN npm install && npm cache clean --force
+USER root
+RUN npx -y playwright install --with-deps
 COPY --chown=node:node . .
 RUN npx prisma generate
 CMD ["npm", "run", "dev"]
