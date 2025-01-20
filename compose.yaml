@@ -4,9 +4,46 @@
 ###
 
 services:
-  node:
+  e2e:
     build:
-      # build to the stage named dev
+      target: dev
+    command: ['npx', 'playwright', 'test']
+    profiles:
+      - e2e
+    depends_on:
+      node-e2e:
+        condition: service_started
+    environment:
+      APP_HOST: node-e2e
+      PLAYWRIGHT_HTML_HOST: 0.0.0.0
+    ports:
+      - '9323:9323'
+
+  node:
+    extends:
+      service: base
+    depends_on:
+      prisma-migrate-deploy:
+        condition: service_completed_successfully
+    profiles:
+      - dev
+    environment:
+      APP_HOST: localhost
+      PLAYWRIGHT_HTML_HOST: 0.0.0.0
+    ports:
+      - '9323:9323'
+
+  node-e2e:
+    extends:
+      service: base
+    profiles:
+      - e2e
+    depends_on:
+      prisma-db-seed:
+        condition: service_completed_successfully
+
+  base:
+    build:
       target: dev
     ports:
       - '5173:5173'
@@ -17,23 +54,35 @@ services:
       JWT_ACCESS_FILE: /run/secrets/jwt-access
     secrets:
       - jwt-access
-    depends_on:
-      prisma-migrate-deploy:
-        condition: service_completed_successfully
+    # I don't want this service to run, just to define config common for node
+    # and e2e services. Thus, base is not an useful profile, it's just there to
+    # avoid running this service when dev or e2e profile is specified.
     profiles:
-      - dev
+      - base
     develop:
       watch:
         - action: sync
           path: ./
           target: /app
-          ignore:
-            - playwright*
-            - test-results
         - action: rebuild
           path: package.json
         - action: rebuild
           path: package-lock.json
+
+  prisma-db-seed:
+    build:
+      target: dev
+    command: ['npx', 'prisma', 'db', 'seed']
+    environment:
+      # Ideally, it should be stored as a secret, but looks like Prisma
+      # basically requires this env var to exist
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
+    depends_on:
+      prisma-migrate-deploy:
+        condition: service_completed_successfully
+    profiles:
+      - seed
+      - e2e
 
   prisma-migrate-deploy:
     build:
@@ -51,20 +100,6 @@ services:
         - action: sync+restart
           path: ./prisma/migrations
           target: /app/prisma/migrations
-
-  prisma-db-seed:
-    build:
-      target: dev
-    command: ['npx', 'prisma', 'db', 'seed']
-    environment:
-      # Ideally, it should be stored as a secret, but looks like Prisma
-      # basically requires this env var to exist
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
-    depends_on:
-      prisma-migrate-deploy:
-        condition: service_completed_successfully
-    profiles:
-      - seed
 
   db:
     image: postgres:alpine
