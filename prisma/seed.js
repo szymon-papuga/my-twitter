@@ -16,6 +16,13 @@ const tweets = Array.from({ length: 50 }).map(() => ({
 }));
 
 async function main() {
+	const tweetCount = await prisma.tweet.count();
+
+	if (tweetCount >= 50) {
+		console.log('Skiping seeding as there are over 50 tweets in DB');
+		return;
+	}
+
 	console.log(`Start seeding...`);
 
 	for (const t of tweets) {
