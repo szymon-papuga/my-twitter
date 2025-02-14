@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test';
+import { test, expect } from '../playwright/fixtures';
+test.describe.configure({ mode: 'parallel' });
 
 test('when comment button clicked, then textbox visible', async ({ page }) => {
 	await page.goto('/login');

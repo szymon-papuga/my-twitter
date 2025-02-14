@@ -16,6 +16,9 @@ services:
     environment:
       APP_HOST: node-e2e
       PLAYWRIGHT_HTML_HOST: 0.0.0.0
+      # Ideally, it should be stored as a secret, but looks like Prisma
+      # basically requires this env var to exist
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/mydb?schema=public
     ports:
       - '9323:9323'
 
