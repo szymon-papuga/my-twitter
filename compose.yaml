@@ -111,8 +111,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD_FILE: /run/secrets/db-password
-    volumes:
-      - db-data:/var/lib/postgresql/data
     healthcheck:
       test: pg_isready -U postgres
       interval: '5s'
@@ -124,6 +122,3 @@ secrets:
     file: secrets/jwt-access
   db-password:
     file: secrets/db-password
-
-volumes:
-  db-data:
